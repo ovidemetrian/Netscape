@@ -6,8 +6,7 @@ A single-file tribute to Netscape Navigator 1.0, running a museum of modern dark
 patterns inside a 1994 browser chrome. No build step, no dependencies, no tracker,
 no server. One HTML file, 60 KB, and a modem that still screams.
 
-**Live:** https://USERNAME.github.io/mobius-bar/
-
+**Live:** https://ovidemetrian.github.io/Netscape/
 ---
 
 ## The modem answers first
