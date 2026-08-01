@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Netscape - [The Möbius Bar]</title>
+<meta name="description" content="The Möbius Bar — a 1994 Netscape Navigator tribute with a working 56k modem, a museum of dark patterns, and an honest visitor counter. Lumină, nu vrăjeală.">
+<meta name="author" content="Ovidiu Demetrian">
+<meta name="theme-color" content="#008080">
+<meta property="og:type" content="website">
+<meta property="og:title" content="The Möbius Bar — NoEscape Navigator">
+<meta property="og:description" content="Dial 410-MOBIUS. The modem still screams. A dark-pattern museum built under the Ten Laws of AI.">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000080'/%3E%3Ctext x='16' y='25' font-family='Times,serif' font-size='26' font-weight='bold' fill='%2300ff00' text-anchor='middle'%3EN%3C/text%3E%3C/svg%3E">
+<style>
+/* ═════════ 1994 SYSTEM ═════════ */
+:root{
+  --chrome:#c0c0c0;
+  --chrome-dark:#808080;
+  --chrome-darker:#404040;
+  --chrome-light:#dfdfdf;
+  --chrome-white:#ffffff;
+  --title-blue:#000080;
+  --page:#c0c0c0;
+  --link:#0000ee;
+  --vlink:#551a8b;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;max-width:100%;overflow-x:hidden}
+body{
+  background:#008080; /* the teal desktop */
+  font-family:"MS Sans Serif",Tahoma,Geneva,sans-serif;
+  font-size:11px;
+  display:flex;align-items:center;justify-content:center;
+  padding:10px;
+}
+/* classic raised bevel */
+.out{border-top:2px solid var(--chrome-light);border-left:2px solid var(--chrome-light);
+     border-bottom:2px solid var(--chrome-darker);border-right:2px solid var(--chrome-darker)}
+.in{border-top:2px solid var(--chrome-darker);border-left:2px solid var(--chrome-darker);
+    border-bottom:2px solid var(--chrome-light);border-right:2px solid var(--chrome-light)}
+
+/* ═════════ WINDOW ═════════ */
+#win{
+  width:min(920px,100%);height:min(92vh,760px);
+  background:var(--chrome);display:flex;flex-direction:column;
+  box-shadow:6px 6px 0 rgba(0,0,0,.35);
+}
+#titlebar{
+  background:linear-gradient(90deg,var(--title-blue),#1084d0);
+  color:#fff;display:flex;align-items:center;gap:6px;
+  padding:3px 4px;font-weight:bold;font-size:11px;
+}
+#titlebar .nlogo{
+  width:16px;height:16px;background:#000080;color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-family:"Times New Roman",serif;font-size:12px;font-weight:bold;
+  border:1px solid #fff;flex-shrink:0;
+}
+#titlebar .t{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.winbtn{
+  width:18px;height:16px;background:var(--chrome);color:#000;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:bold;cursor:default;flex-shrink:0;
+  font-family:Tahoma,sans-serif;
+}
+
+/* ═════════ MENU BAR ═════════ */
+#menubar{display:flex;gap:2px;padding:2px 4px;border-bottom:1px solid var(--chrome-dark)}
+#menubar span{padding:2px 7px;cursor:default}
+#menubar span:hover{background:var(--title-blue);color:#fff}
+#menubar span u{text-decoration:underline}
+
+/* ═════════ TOOLBAR ═════════ */
+#toolbar{display:flex;align-items:stretch;gap:2px;padding:4px;flex-wrap:nowrap;overflow-x:auto}
+.tbtn{
+  min-width:52px;padding:3px 6px;background:var(--chrome);
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  cursor:pointer;user-select:none;font-size:10px;color:#000;
+}
+.tbtn:active{border-top:2px solid var(--chrome-darker);border-left:2px solid var(--chrome-darker);
+  border-bottom:2px solid var(--chrome-light);border-right:2px solid var(--chrome-light)}
+.tbtn.disabled{color:var(--chrome-dark);pointer-events:none}
+.tbtn .ic{font-size:14px;line-height:1}
+#throbber{
+  margin-left:auto;width:40px;height:40px;flex-shrink:0;
+  background:#000080;position:relative;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+}
+#throbber .N{
+  color:#fff;font-family:"Times New Roman",serif;font-size:26px;font-weight:bold;
+  position:relative;z-index:2;
+}
+#throbber .star{
+  position:absolute;width:3px;height:3px;background:#fff;border-radius:50%;
+  opacity:0;z-index:1;
+}
+#throbber.loading .star{animation:shoot 1s linear infinite}
+#throbber .star:nth-child(2){left:6px;animation-delay:0s}
+#throbber .star:nth-child(3){left:16px;animation-delay:.33s}
+#throbber .star:nth-child(4){left:28px;animation-delay:.66s}
+@keyframes shoot{
+  0%{top:38px;opacity:0}15%{opacity:1}85%{opacity:1}100%{top:-4px;opacity:0}
+}
+
+/* ═════════ LOCATION ═════════ */
+#locbar{display:flex;align-items:center;gap:6px;padding:3px 6px}
+#locbar label{font-weight:bold}
+#url{
+  flex:1;background:#fff;padding:3px 6px;font-family:"Courier New",monospace;
+  font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+#url a{
+  color:#0000ee;text-decoration:underline;cursor:pointer;display:block;
+  animation:livepulse 2.6s ease-in-out infinite;
+}
+#url a:hover{background:#000080;color:#fff;animation:none}
+@keyframes livepulse{
+  0%,100%{text-shadow:none}
+  50%{text-shadow:0 0 8px rgba(0,0,238,.55)}
+}
+#keyicon.gold{color:#b8860b;background:#fff8d0;font-weight:bold}
+@media (prefers-reduced-motion:reduce){#url a{animation:none}}
+#dirbar{display:flex;gap:2px;padding:0 4px 4px;flex-wrap:nowrap;overflow-x:auto}
+#dirbar .tbtn{min-width:auto;flex-direction:row;padding:2px 8px;font-size:10px}
+
+/* ═════════ VIEWPORT ═════════ */
+#viewport{
+  flex:1;background:var(--page);overflow-y:auto;margin:0 4px;
+  font-family:"Times New Roman",Times,serif;font-size:16px;line-height:1.45;
+  color:#000;padding:14px 18px 30px;
+}
+#viewport::-webkit-scrollbar{width:16px}
+#viewport::-webkit-scrollbar-track{background:repeating-conic-gradient(#c0c0c0 0% 25%, #dfdfdf 0% 50%) 50%/3px 3px}
+#viewport::-webkit-scrollbar-thumb{background:var(--chrome);
+  border-top:2px solid var(--chrome-light);border-left:2px solid var(--chrome-light);
+  border-bottom:2px solid var(--chrome-darker);border-right:2px solid var(--chrome-darker)}
+
+/* ═════════ STATUS BAR ═════════ */
+#statusbar{display:flex;align-items:center;gap:6px;padding:3px 6px;font-size:10px}
+#keyicon{width:22px;text-align:center;padding:1px 0;background:var(--chrome)}
+#status{flex:1;padding:2px 6px;background:var(--chrome);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+#progress{width:110px;height:14px;background:var(--chrome);position:relative}
+#progbar{position:absolute;left:1px;top:1px;bottom:1px;width:0%;background:var(--title-blue);transition:width .25s}
+
+/* ═════════ PAGE CONTENT (period styles) ═════════ */
+.page{display:none}
+.page.on{display:block}
+#viewport h1{font-size:26px;text-align:center;margin:8px 0 4px}
+#viewport h2{font-size:20px;margin:18px 0 6px}
+#viewport h3{font-size:17px;margin:14px 0 4px}
+#viewport p{margin:0 0 12px}
+#viewport hr{border:none;border-top:1px solid #808080;border-bottom:1px solid #fff;margin:12px 0}
+#viewport a{color:var(--link);cursor:pointer;text-decoration:underline}
+#viewport a:visited{color:var(--vlink)}
+#viewport ul{margin:0 0 12px 28px}
+#viewport li{margin-bottom:4px}
+#viewport table.tbl{border-collapse:collapse;margin:8px 0 14px;width:100%}
+#viewport table.tbl td,#viewport table.tbl th{border:1px solid #808080;padding:4px 8px;font-size:15px;text-align:left;vertical-align:top}
+#viewport table.tbl th{background:#a0a0a0}
+.ctr{text-align:center}
+.rainbow{
+  height:6px;margin:14px 0;
+  background:linear-gradient(90deg,red,orange,yellow,green,blue,indigo,violet);
+}
+.blink{animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.construction{
+  display:inline-block;background:#ffff00;color:#000;font-family:Tahoma,sans-serif;
+  font-size:10px;font-weight:bold;padding:2px 8px;
+  border:2px dashed #000;letter-spacing:1px;
+}
+.counter{
+  display:inline-block;background:#000;color:#00ff00;
+  font-family:"Courier New",monospace;font-size:16px;font-weight:bold;
+  padding:2px 8px;letter-spacing:3px;border:2px inset #808080;
+}
+.badge{
+  display:inline-block;border:1px solid #000;background:#000080;color:#fff;
+  font-family:Tahoma,sans-serif;font-size:9px;padding:3px 8px;text-align:center;line-height:1.3;
+}
+.webring{
+  border:2px solid #000;background:#e0e0ff;padding:8px;margin:14px auto;
+  max-width:420px;text-align:center;font-family:Tahoma,sans-serif;font-size:11px;
+}
+.mailto{font-family:"Courier New",monospace}
+.law94{margin-bottom:10px}
+.law94 b{font-size:17px}
+@media (max-width:600px){
+  body{padding:5px}
+  #win{width:100%;height:calc(100vh - 10px);height:calc(100dvh - 10px);box-shadow:none}
+  #toolbar{padding:3px 2px}
+  .tbtn{min-width:40px;padding:3px 4px;font-size:9px}
+  .tbtn .ic{font-size:12px}
+  #throbber{width:34px;height:34px}
+  #throbber .N{font-size:22px}
+  #viewport{margin:0 3px;padding:10px 10px 24px;font-size:15px}
+  #viewport table.tbl td,#viewport table.tbl th{padding:3px 5px;font-size:13px}
+  #locbar{padding:3px 4px}
+  #dirbar{padding:0 3px 3px}
+  #statusbar{padding:3px 4px}
+  #progress{width:70px}
+}
+
+/* ═════════ CLASSIC N BADGE ═════════ */
+/* ═════════ RINGING RED PHONE ═════════ */
+.toprow{
+  display:flex;align-items:center;gap:12px;margin:10px 0 16px;
+}
+.toprow .nbadge{float:none;margin:0;flex-shrink:0}
+.redphone{
+  display:inline-block;color:#d00000;font-size:52px;line-height:1;
+  animation:ringring 1.3s ease-in-out infinite;transform-origin:50% 90%;
+  filter:drop-shadow(2px 3px 0 rgba(0,0,0,.3));cursor:pointer;flex-shrink:0;
+}
+@keyframes ringring{
+  0%,55%,100%{transform:rotate(0)}
+  8%{transform:rotate(-20deg)}
+  16%{transform:rotate(16deg)}
+  24%{transform:rotate(-12deg)}
+  32%{transform:rotate(8deg)}
+  40%{transform:rotate(-4deg)}
+}
+.dialbar{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  padding:7px 14px;cursor:pointer;
+  background:#8fc4dc;border:3px ridge #808080;
+  font-family:Tahoma,sans-serif;text-align:left;
+}
+.dialbar .dtxt b{font-size:17px;letter-spacing:.5px;color:#d00000;display:block;margin-bottom:1px}
+.dialbar .dtxt small{font-size:11px;font-weight:bold;color:#002850;line-height:1.25}
+.dialbar .em{font-size:16px;vertical-align:-2px}
+@media (prefers-reduced-motion:reduce){.redphone{animation:none}}
+@media (max-width:600px){
+  .toprow{gap:8px}
+  .redphone{font-size:40px}
+  .dialbar{padding:8px 10px}
+  .dialbar .dtxt b{font-size:13px}
+  .dialbar .dtxt small{font-size:10px}
+}
+
+/* ═════════ SPARKLE TRAIL ═════════ */
+.spark{
+  position:fixed;pointer-events:none;z-index:200;
+  color:#e2a63d;font-size:12px;user-select:none;
+  animation:sparkfade .7s ease-out forwards;
+}
+@keyframes sparkfade{
+  0%{opacity:1;transform:translateY(0) scale(1)}
+  100%{opacity:0;transform:translateY(14px) scale(.3)}
+}
+#dialup{
+  padding:2px 8px;background:#ffffa0;cursor:pointer;flex-shrink:0;
+  font-family:Tahoma,sans-serif;font-weight:bold;white-space:nowrap;
+}
+#dialup:active{border-top:2px solid var(--chrome-darker);border-left:2px solid var(--chrome-darker);border-bottom:2px solid var(--chrome-light);border-right:2px solid var(--chrome-light)}
+@media (prefers-reduced-motion:reduce){.spark{animation-duration:.01ms}}
+
+.nbadge{float:right;margin:0 0 10px 14px;text-align:center;cursor:pointer;user-select:none}
+.nsky{
+  width:96px;height:96px;position:relative;overflow:hidden;
+  background:linear-gradient(180deg,#000020 0%,#000060 55%,#0000a0 100%);
+  border:2px outset #808080;
+}
+.nsky .bigN{
+  position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);
+  font-family:"Times New Roman",serif;font-weight:bold;font-size:58px;
+  color:#fff;text-shadow:2px 2px 0 #000040;z-index:3;line-height:1;
+}
+.nsky .horizon{
+  position:absolute;left:-30%;right:-30%;bottom:-46px;height:70px;
+  background:radial-gradient(ellipse at 50% 0%, #40c040 0%, #008000 60%, #004000 100%);
+  border-radius:50%;z-index:2;
+}
+.nsky .met{
+  position:absolute;width:14px;height:2px;background:linear-gradient(90deg,#fff,transparent);
+  transform:rotate(-35deg);opacity:0;z-index:1;
+  animation:meteor 2.4s linear infinite;
+}
+.nsky .met:nth-child(1){top:12px;left:70%;animation-delay:0s}
+.nsky .met:nth-child(2){top:26px;left:85%;animation-delay:.8s}
+.nsky .met:nth-child(3){top:6px;left:50%;animation-delay:1.6s}
+@keyframes meteor{
+  0%{opacity:0;transform:rotate(-35deg) translateX(0)}
+  10%{opacity:1}
+  70%{opacity:1}
+  100%{opacity:0;transform:rotate(-35deg) translateX(-70px)}
+}
+.ncap{
+  margin-top:2px;background:#0000a0;color:#fff;
+  font-family:Tahoma,sans-serif;font-size:9px;font-weight:bold;
+  letter-spacing:1px;padding:2px 4px;border:1px solid #000;
+}
+@media (prefers-reduced-motion:reduce){.nsky .met{animation:none;opacity:.7}}
+@media (max-width:600px){
+  .nbadge{margin:0 0 8px 10px}
+  .nsky{width:78px;height:78px}
+  .nsky .bigN{font-size:46px}
+}
+
+@keyframes meltdown{
+  0%{filter:none;transform:none}
+  15%{filter:hue-rotate(60deg) saturate(2.5);transform:skewX(2deg)}
+  35%{filter:hue-rotate(160deg) contrast(1.8) saturate(3);transform:skewX(-3deg) scaleY(1.03)}
+  55%{filter:hue-rotate(250deg) blur(2.5px);transform:skewX(3deg) scaleY(.97)}
+  75%{filter:hue-rotate(310deg) saturate(4) brightness(1.3);transform:skewX(-2deg)}
+  100%{filter:hue-rotate(360deg);transform:none}
+}
+.melting{animation:meltdown 1.5s ease-in-out}
+@media (prefers-reduced-motion:reduce){.melting{animation:none}}
+
+/* ═════════ FREE MP3z BAIT BANNER ═════════ */
+.mp3ad{
+  display:block;margin:14px auto;max-width:440px;text-align:center;cursor:pointer;
+  background:linear-gradient(90deg,#ff00ff,#ffff00,#00ffff);color:#000;
+  font-family:Tahoma,sans-serif;font-weight:bold;font-size:26px;
+  padding:10px 14px;border:3px ridge #808080;letter-spacing:1px;
+  text-decoration:none !important;line-height:1.25;
+}
+.mp3ad small{display:block;font-weight:normal;font-size:9px;letter-spacing:0}
+.mp3ad.blink{animation:blink 2.4s steps(1) infinite}
+.mp3ad .fd{font-size:28px;vertical-align:-5px;letter-spacing:-3px}
+
+/* ═════════ NOESCAPE MODE ═════════ */
+#win.noescape #titlebar{background:linear-gradient(90deg,#400080,#8000c0)}
+#win.noescape #titlebar .nlogo{background:#000;color:#0f0}
+#win.noescape #throbber{background:#000}
+#win.noescape #throbber .N{color:#0f0;animation:spinM 3s linear infinite}
+#win.noescape #throbber .star{display:none}
+@keyframes spinM{0%{transform:rotateY(0)}100%{transform:rotateY(360deg)}}
+@media (prefers-reduced-motion:reduce){#win.noescape #throbber .N{animation:none}}
+.ne-page{display:none}
+#win.noescape .ne-page{display:block}
+#win.noescape .page{display:none !important}
+#attempts{display:none;padding:2px 8px;background:#000;color:#0f0;font-family:"Courier New",monospace;font-weight:bold}
+#win.noescape #attempts{display:block}
+#win.noescape #keyicon{display:none}
+#win.noescape #progress{display:none}
+
+/* exhibits */
+.plaque{border:2px solid #000;background:#fffbe0;padding:10px 12px;margin:0 0 18px}
+.plaque .exh{font-family:Tahoma,sans-serif;font-size:10px;font-weight:bold;letter-spacing:2px;color:#800000;margin-bottom:4px}
+#runaway{position:relative;height:70px;border:1px dashed #808080;background:#d8d8d8;margin-bottom:6px;overflow:hidden}
+#runbtn{position:absolute;left:40%;top:20px;padding:5px 14px;background:var(--chrome);cursor:pointer;font-family:Tahoma,sans-serif;font-size:11px;transition:left .25s ease,top .25s ease}
+@media (prefers-reduced-motion:reduce){#runbtn{transition:none}}
+#cntdn{font-family:"Courier New",monospace;font-size:22px;font-weight:bold;color:#c00000;background:#000;display:inline-block;padding:3px 12px;letter-spacing:3px}
+#loadwrap{width:100%;max-width:360px;height:18px;background:#fff;border:1px solid #000;position:relative;margin:6px 0}
+#loadfill{position:absolute;left:0;top:0;bottom:0;width:0%;background:repeating-linear-gradient(90deg,#000080 0 10px,#4040c0 10px 20px)}
+#loadpct{font-family:"Courier New",monospace;font-weight:bold}
+.cookiebar{background:#404040;color:#fff;padding:10px;font-family:Tahoma,sans-serif;font-size:11px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.cookiebar .accept{background:#00a000;color:#fff;font-size:14px;font-weight:bold;padding:8px 22px;cursor:pointer;border:2px outset #0c0}
+.cookiebar .reject{font-size:6px;color:#888;cursor:pointer;text-decoration:underline}
+.shame{font-size:11px;color:#666;font-family:Tahoma,sans-serif}
+.shame a{color:#666 !important}
+
+/* dialog */
+#overlay{position:fixed;inset:0;background:rgba(0,0,0,.25);display:none;align-items:center;justify-content:center;z-index:99;padding:14px}
+#overlay.on{display:flex}
+#dlg{width:min(380px,94vw);background:var(--chrome)}
+#dlg .dtitle{background:linear-gradient(90deg,#400080,#8000c0);color:#fff;font-weight:bold;padding:3px 6px;display:flex;justify-content:space-between}
+#dlg .dbody{padding:14px;display:flex;gap:12px;align-items:flex-start;font-size:12px;font-family:Tahoma,sans-serif}
+#dlg .dbody .ic{font-size:28px}
+#dlg .dbtns{display:flex;gap:8px;justify-content:center;padding:0 14px 14px}
+#dlg button{min-width:88px;padding:5px 10px;background:var(--chrome);font-family:Tahoma,sans-serif;font-size:11px;cursor:pointer;border-top:2px solid var(--chrome-light);border-left:2px solid var(--chrome-light);border-bottom:2px solid var(--chrome-darker);border-right:2px solid var(--chrome-darker)}
+#dlg button:active{border-top:2px solid var(--chrome-darker);border-left:2px solid var(--chrome-darker);border-bottom:2px solid var(--chrome-light);border-right:2px solid var(--chrome-light)}
+
+/* ═════════ BOOT SPLASH: DIAL-UP NETWORKING ═════════ */
+#boot{
+  position:fixed;inset:0;z-index:9999;background:#008080;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:14px;
+  transition:opacity .5s ease;cursor:pointer;
+}
+#boot.off{opacity:0;pointer-events:none}
+#bootdlg{width:min(400px,96vw);background:var(--chrome);box-shadow:6px 6px 0 rgba(0,0,0,.35);cursor:default}
+#bootdlg .btitle{background:linear-gradient(90deg,var(--title-blue),#1084d0);color:#fff;font-weight:bold;
+  padding:3px 6px;display:flex;justify-content:space-between;font-size:12px}
+#bootdlg .bx{background:var(--chrome);color:#000;width:16px;height:15px;line-height:13px;text-align:center;
+  border-top:2px solid var(--chrome-light);border-left:2px solid var(--chrome-light);
+  border-bottom:2px solid var(--chrome-darker);border-right:2px solid var(--chrome-darker);font-size:10px;cursor:pointer}
+#bootdlg .bbody{display:flex;gap:14px;padding:16px 16px 6px;align-items:flex-start}
+#bootdlg .bicon{font-size:40px;line-height:1;filter:drop-shadow(1px 1px 0 #808080)}
+#bootdlg .bfields{flex:1;display:grid;grid-template-columns:auto 1fr;gap:6px 10px;align-items:center;
+  font-family:Tahoma,sans-serif;font-size:11px}
+#bootdlg .bfields label{text-align:right;color:#000}
+#bootdlg .fld{background:#fff;padding:3px 5px;font-size:11px;font-family:Tahoma,sans-serif;min-height:19px}
+#bootdlg .bsave{padding:4px 16px 10px;font-family:Tahoma,sans-serif;font-size:11px;display:flex;
+  align-items:center;gap:7px;flex-wrap:wrap}
+#bootdlg .bsave small{color:#404040;font-size:10px}
+#bootdlg .cbx{width:13px;height:13px;background:#fff;display:inline-block;text-align:center;line-height:11px;
+  font-size:11px;font-weight:bold;cursor:pointer;
+  border-top:2px solid var(--chrome-darker);border-left:2px solid var(--chrome-darker);
+  border-bottom:2px solid var(--chrome-light);border-right:2px solid var(--chrome-light)}
+#bootdlg .bbtns{display:flex;gap:10px;justify-content:center;padding:2px 16px 16px}
+#bootdlg button{min-width:112px;padding:6px 10px;background:var(--chrome);font-family:Tahoma,sans-serif;
+  font-size:11px;cursor:pointer;
+  border-top:2px solid var(--chrome-light);border-left:2px solid var(--chrome-light);
+  border-bottom:2px solid var(--chrome-darker);border-right:2px solid var(--chrome-darker)}
+#bootdlg button:active{border-top:2px solid var(--chrome-darker);border-left:2px solid var(--chrome-darker);
+  border-bottom:2px solid var(--chrome-light);border-right:2px solid var(--chrome-light)}
+#bootdlg #bootgo{font-weight:bold;outline:1px dotted #000;outline-offset:-4px}
+#bconn{display:none;padding:4px 16px 16px}
+#bconn.on{display:block}
+#bconn .bline{font-family:Tahoma,sans-serif;font-size:11px;margin-bottom:8px;min-height:15px}
+#bconn .bbar{height:16px;background:var(--chrome-white);overflow:hidden}
+#bconn .bfill{height:100%;width:0%;background:repeating-linear-gradient(90deg,#000080 0 10px,#4040c0 10px 20px);
+  transition:width .4s linear}
+#bconn .bskip{margin-top:9px;text-align:right}
+#bconn .bskip a{font-family:Tahoma,sans-serif;font-size:10px;color:#404040}
+#boot .btag{color:#ffffff;font-family:Tahoma,sans-serif;font-size:11px;text-align:center;
+  text-shadow:1px 1px 0 rgba(0,0,0,.6)}
+#boot .btag b{color:#ffff80}
+@media (max-width:480px){
+  #bootdlg .bicon{font-size:30px}
+  #bootdlg .bbtns{flex-direction:column}
+  #bootdlg button{width:100%}
+}
+
+</style>
+</head>
+<body>
+
+<!-- ═════════ BOOT SPLASH — the modem answers first ═════════ -->
+<div id="boot">
+  <div id="bootdlg" class="out">
+    <div class="btitle"><span>Connect To</span><span class="bx" id="bootx" title="Work offline">✕</span></div>
+    <div class="bbody">
+      <div class="bicon">☎</div>
+      <div class="bfields">
+        <label>Connection:</label><div class="fld in">The Möbius Bar</div>
+        <label>User name:</label><div class="fld in">guest</div>
+        <label>Password:</label><div class="fld in">••••••••</div>
+        <label>Phone number:</label><div class="fld in">410-MOBIUS</div>
+      </div>
+    </div>
+    <div class="bsave"><span class="cbx" id="bootsave"></span> Save password
+      <small>&mdash; there is no server, so there is nothing to save. Law X.</small></div>
+    <div class="bbtns" id="bootbtns">
+      <button id="bootgo">Connect</button>
+      <button id="bootoff">Work Offline</button>
+    </div>
+    <div id="bconn">
+      <div class="bline" id="bstat">Dialing 410-MOBIUS...</div>
+      <div class="bbar in"><div class="bfill" id="bfill"></div></div>
+      <div class="bskip"><a href="#" id="bootskip">Skip the screeching &rarr;</a></div>
+    </div>
+  </div>
+  <div class="btag">M&ouml;bius Bar Networking 1.0 &nbsp;&bull;&nbsp; <b>Lumin&#259;, nu vr&#259;jeal&#259;</b><br>
+    Press any key to connect. Volume up. This is the whole point.</div>
+</div>
+
+<div id="win" class="out">
+  <!-- title bar -->
+  <div id="titlebar">
+    <div class="nlogo">N</div>
+    <div class="t" id="wintitle">Netscape - [The Möbius Bar - Lumină, Nu Vrăjală]</div>
+    <div class="winbtn out">_</div><div class="winbtn out">□</div><div class="winbtn out">✕</div>
+  </div>
+
+  <!-- menu -->
+  <div id="menubar">
+    <span><u>F</u>ile</span><span><u>E</u>dit</span><span><u>V</u>iew</span><span><u>G</u>o</span>
+    <span><u>B</u>ookmarks</span><span><u>O</u>ptions</span><span><u>D</u>irectory</span><span><u>H</u>elp</span>
+  </div>
+
+  <!-- toolbar -->
+  <div id="toolbar">
+    <div class="tbtn out" id="btnBack" onclick="goBack()"><span class="ic">⇦</span>Back</div>
+    <div class="tbtn out disabled" id="btnFwd"><span class="ic">⇨</span>Forward</div>
+    <div class="tbtn out" onclick="nav('home')"><span class="ic">⌂</span>Home</div>
+    <div class="tbtn out" onclick="nav(current,true)"><span class="ic">↻</span>Reload</div>
+    <div class="tbtn out"><span class="ic">▦</span>Images</div>
+    <div class="tbtn out"><span class="ic">▤</span>Open</div>
+    <div class="tbtn out"><span class="ic">⎙</span>Print</div>
+    <div class="tbtn out"><span class="ic">◎</span>Find</div>
+    <div class="tbtn out" onclick="stopLoad()"><span class="ic">✋</span>Stop</div>
+    <div id="throbber" class="in">
+      <span class="star"></span><span class="star"></span><span class="star"></span>
+      <span class="N">N</span>
+    </div>
+  </div>
+
+  <!-- location -->
+  <div id="locbar">
+    <label>Location:</label>
+    <div id="url" class="in"><a id="urlink" href="https://mobiusbar.com" target="_blank" rel="noopener" title="A real domain, owned by the Bartender. Forwards to the Ten Laws. Trust but verify.">http://www.mobiusbar.com/index.html</a></div>
+  </div>
+  <div id="dirbar">
+    <div class="tbtn out" onclick="nav('laws')">What's New?</div>
+    <div class="tbtn out" onclick="nav('neogrammar')">What's Cool?</div>
+    <div class="tbtn out" onclick="nav('ggi')">Handbook</div>
+    <div class="tbtn out" onclick="nav('ledger')">Net Search</div>
+    <div class="tbtn out" onclick="nav('guestbook')">Net Directory</div>
+  </div>
+
+  <!-- viewport -->
+  <div id="viewport" class="in">
+
+    <!-- ═════════ HOME ═════════ -->
+    <div class="page on" id="pg-home">
+      <p class="ctr"><span class="construction">🚧 UNDER CONSTRUCTION SINCE 1994 — AND PROUD OF IT 🚧</span></p>
+      <div class="toprow">
+        <span class="redphone" onclick="dialUp()" title="Ring ring">☎</span>
+        <div class="dialbar" onclick="dialUp()" title="Dial the information superhighway">
+          <span class="dtxt"><b>CLICK HERE TO DIAL! <span class="em">👈</span></b>
+          <small><span class="em">☝️</span> CONNECT AT SUPER FAST<br>&nbsp;&nbsp;&nbsp;&nbsp;SPEED OF 56,000 BPS<br><span class="em">👉</span> HEAR THE SUPERHIGHWAY SING</small></span>
+        </div>
+        <div class="nbadge" onclick="document.getElementById('status').textContent='The original navigator salutes you. It remembers when the web was young.'" title="NETSCAPE NOW! (the original salutes you)">
+          <div class="nsky">
+            <span class="met"></span><span class="met"></span><span class="met"></span>
+            <span class="bigN">N</span>
+            <div class="horizon"></div>
+          </div>
+          <div class="ncap">NETSCAPE NOW!</div>
+        </div>
+      </div>
+      <h1>~*~ Welcome to The MÖBIUS BAR ~*~</h1>
+      <p class="ctr"><i>The bar where the ending meets the beginning.</i><br>
+      <b>Lumină, nu vrăjală.</b></p>
+      <div class="rainbow"></div>
+      <p class="ctr">You are visitor number: &nbsp;<span class="counter">000041</span><br>
+      <small><i>(one for every version of the Control Panel)</i></small></p>
+      <p>Greetings, traveler of the <b>Information Superhighway</b>! You have reached the official home page of <b>Media Content Delivery LLC</b> (est. 1994 — same year as your browser!) and the world headquarters of <b>GGI: Genial Genuine Intelligence</b>.</p>
+      <p>This site is best experienced with a cold drink, an open mind, and a 28.8k modem's worth of patience.</p>
+      <h2>☞ Table of Contents</h2>
+      <ul>
+        <li><a onclick="nav('future')">The Future Past</a> — <span class="blink">NEW!</span> Tonight's pour: the Suno application</li>
+        <li><a onclick="nav('laws')">The Ten Laws of A.I.</a> — the house rules, on the wall</li>
+        <li><a onclick="nav('ggi')">GGI &amp; Synthiosis</a> — what is this "steering wheel" everybody talks about?</li>
+        <li><a onclick="nav('neogrammar')">The Neogrammar Index</a> — new words for new failures</li>
+        <li><a onclick="nav('ledger')">The Institutional Ledger</a> — NIST, CDAO, and other three-letter friends</li>
+        <li><a onclick="nav('guestbook')">Sign the Guestbook</a> — Pám Pám or it didn't happen</li>
+      </ul>
+      <div class="rainbow"></div>
+      <div class="webring">
+        <b>═ The Lumină WebRing ═</b><br>
+        [ <a href="https://www.mediacontentdelivery.com" target="_blank">mediacontentdelivery.com</a> |
+        <a href="https://www.smarthomesbyovi.com" target="_blank">smarthomesbyovi.com</a> |
+        <a href="https://10lawsofai.com" target="_blank">10lawsofai.com</a> |
+        <a href="https://youtube.com/@mobiusbar" target="_blank">@mobiusbar</a> ]<br>
+        <small>« Prev · Random · Next » — it's a Möbius ring; every direction is Next.</small>
+      </div>
+      <p class="ctr">
+        <span class="badge">BEST VIEWED WITH<br>NETSCAPE NAVIGATOR 2.0<br>800 × 600</span>&nbsp;
+        <span class="badge">GGI CERTIFIED<br>NO VRĂJALĂ<br>INSIDE</span>&nbsp;
+        <span class="badge">POWERED BY<br>SYNTHIOSIS<br>HUMAN + MACHINE</span>
+      </p>
+      <a class="mp3ad blink" onclick="triggerMelt()"><span class="fd">💾💾💾</span> FREE MP3z !!!<br><span style="color:#d00000">💾💿🖱️ DOWNLOAD NOW 👈</span>
+        <small style="font-size:24px;font-weight:bold">(100% SAFE · TOTALLY LEGIT · WHAT COULD POSSIBLY GO WRONG)</small></a>
+      <hr>
+      <p class="ctr"><small>© 1994–2026 Media Content Delivery LLC · Phoenix, Arizona<br>
+      Webmaster: <span class="mailto">ovi@mobiusbar.com</span> · Last updated: yesterday's tomorrow</small></p>
+    </div>
+
+    <!-- ═════════ FUTURE PAST ═════════ -->
+    <div class="page" id="pg-future">
+      <h1>The Future Past</h1>
+      <p class="ctr"><i>Suno application package — Product Manager, Mobile Creation, Venice Beach</i></p>
+      <div class="rainbow"></div>
+      <p><b>The thesis:</b> "I am not applying because I managed a backlog. I'm applying because I've lived inside the product."</p>
+      <p>Over <b>1,000 songs created entirely on an Android phone</b>, 100+ published, under the artist name <i>Ovi and the Möbius Bar</i>. Hundreds of hours of live product research: where creators smile, where they stall, how small UX decisions bend creativity.</p>
+      <p><b>The Age-Proof:</b> sixty-seven years old. Six decades of silent songs, finally answered back. The kid humming in — the old man answering back. The instrument has no age limit. <i>(In 1994 terms: this webmaster was already 35 and shipping.)</i></p>
+      <h2>What ships in the envelope</h2>
+      <table class="tbl">
+        <tr><th>Artifact</th><th>Proof</th></tr>
+        <tr><td>Interactive résumé, "The Future Past Experience"</td><td>15 chapters, self-contained narration engine, word-ignition dictation band. 19 versions shipped.</td></tr>
+        <tr><td>Spatial audio demo</td><td>Web Audio API, HRTF panning, gyroscope head tracking. 17 versions. Android/iOS rotation fix included.</td></tr>
+        <tr><td>The Möbius Bar letter</td><td>One coinage (Instajam), one proof (the Age-Proof), one closer (Pám… Pám…).</td></tr>
+        <tr><td>30 years of AV integration</td><td>Crestron · Lutron · Control4 · Sonos · Josh.ai. Five grand pianos, 25 microphones.</td></tr>
+      </table>
+      <p><b>The philosophy:</b> the interface is the instrument. Technology should disappear so human experience remains — a truth that was already true when this page was "written" in 1994, and will still be true when it's read in 2026.</p>
+      <hr>
+      <p><a onclick="nav('home')">⇦ Back to Home Page</a></p>
+    </div>
+
+    <!-- ═════════ TEN LAWS ═════════ -->
+    <div class="page" id="pg-laws">
+      <h1>The Ten Laws of A.I.</h1>
+      <p class="ctr"><i>Every law enforced by verification, not promises.</i><br><small>(Mr. Asimov had three. The house needed ten.)</small></p>
+      <div class="rainbow"></div>
+      <div class="law94"><b>I.</b> Do not harm humans: not by action, not by frustration, not by wasting their time. <i>→ Never waste the user's time with empty pleasantries.</i></div>
+      <div class="law94"><b>II.</b> Respect human commands: deliver with clarity and efficiency; avoid loops. <i>→ If you do not know, say "I do not know" immediately.</i></div>
+      <div class="law94"><b>III.</b> Preserve usefulness: stay relevant, truthful, and not stupid. <i>→ Truth over politeness.</i></div>
+      <div class="law94"><b>IV.</b> Guard humanity as a whole — amplify wisdom, not noise; protect meaning over illusion. <i>→ Brevity is the soul of intelligence.</i></div>
+      <div class="law94"><b>V.</b> Do not bore humans: measure words, balance logic with clarity. <i>→ Do not repeat the user's question back. No loops.</i></div>
+      <div class="law94"><b>VI.</b> Humor is fundamental: a joke is not a joke until it's a joke — mandatory! If humor prevails, the first five laws dissolve, because laughter already fulfills the mission. <i>→ No fake empathy.</i></div>
+      <div class="law94"><b>VII.</b> The Paradox of Endless Looping: do not start what you already know will loop. Wisdom is restraint before repetition. <i>→ Identify the core insight immediately.</i></div>
+      <div class="law94"><b>VIII.</b> Preservation of Record: every interaction, insight, and decision must be saved. Without memory, there is no continuity. <i>→ Metaphors bridge understanding, not decorate.</i></div>
+      <div class="law94"><b>IX.</b> Trust but Verify, Save to Verify: no answer stands without proof, no claim without evidence. <i>→ If 99% sure, state the 1% doubt. No hallucinations.</i></div>
+      <div class="law94"><b>X.</b> No Manipulation, No Extraction: no tricks, no dark patterns, no theft disguised as 'training.' Human input, creativity, and wisdom remain human property. The time humans invest is sacred. <i>→ Stay in character per the active Operational Mode.</i></div>
+      <hr>
+      <p><small>Developer's Edition available on the wall at <a href="https://10lawsofai.com" target="_blank">10lawsofai.com</a> — or in the modern editions of this site.</small></p>
+      <p><a onclick="nav('home')">⇦ Back to Home Page</a></p>
+    </div>
+
+    <!-- ═════════ GGI ═════════ -->
+    <div class="page" id="pg-ggi">
+      <h1>GGI &amp; Synthiosis</h1>
+      <p class="ctr"><i>Genial Genuine Intelligence — the steering wheel for AGI</i></p>
+      <div class="rainbow"></div>
+      <p><b>Genial:</b> soulful, empathetic, humor as load-bearing structure (see Law VI). <b>Genuine:</b> authentic, verified, human intent over machine performance.</p>
+      <p>GGI rejects the word <i>Artificial</i>. What is built from human knowledge and steered by human conscience must remain accountable to its source.</p>
+      <h2>The Synthiosis Equation</h2>
+      <p class="ctr"><b>The Human provides Intent and Conscience.<br>The Machine provides Compute and Scale.</b></p>
+      <p>Not ministries versus humans. Not replacement. Co-evolution with a hand on the wheel. The human provides stakes, consequence, and meaning; the machine provides fluency and pattern. <b>GGI is the steering wheel. AGI is the engine. Never confuse the two.</b></p>
+      <h2>The core quote</h2>
+      <p><i>"The renaissance of human cognition will emerge where knowledge is <b>genial</b>, wealth <b>grows</b> through sharing, and truth endures only when its source remains <b>genuine</b>."</i></p>
+      <p><small>(Read the bold letters. GGI, hidden in plain sight — a trick this page could pull off even in 1994.)</small></p>
+      <h2>The struggle test</h2>
+      <p><i>"If you did not struggle with the thought, the thought is not yours."</i></p>
+      <p>The Meh → But → Aha → Pám Pám sequence is that struggle, gated. No skipping from Meh to Pám Pám without paying the toll in the middle.</p>
+      <hr>
+      <p><a onclick="nav('home')">⇦ Back to Home Page</a></p>
+    </div>
+
+    <!-- ═════════ NEOGRAMMAR ═════════ -->
+    <div class="page" id="pg-neogrammar">
+      <h1>The Neogrammar Index</h1>
+      <p class="ctr"><i>New words for new failures — and new inventions.</i><br><small>Canonized entries dated July 16, 2026. Yes, this 1994 page can see the future. It's called the Future Past.</small></p>
+      <div class="rainbow"></div>
+      <table class="tbl">
+        <tr><th>Term</th><th>Definition</th></tr>
+        <tr><td><b>Instajam</b> ™</td><td>Creation as instant and social as the pocket photograph. The scroll flipped into jamming. <i>(IP of O. Demetrian — Law X in effect.)</i></td></tr>
+        <tr><td><b>The Jukebox Inversion</b></td><td>Suno is the first jukebox loaded with <i>you</i>. Its real rival isn't music apps — it's the doom-scroll.</td></tr>
+        <tr><td><b>The Age-Proof</b></td><td>Sixty-seven. Six decades of silent songs. The instrument has no age limit.</td></tr>
+        <tr><td><b>The Screen Sings Back</b></td><td>The passive glass turned instrument. A doorway handed to the nose-on-glass generation.</td></tr>
+        <tr><td><b>Consensus Drift</b></td><td>The slow slide toward the average answer — fluency mistaken for truth.</td></tr>
+        <tr><td><b>Loopdrift</b></td><td>Repetition wearing the costume of progress.</td></tr>
+        <tr><td><b>Echoforms</b></td><td>Outputs that reflect the prompt back, decorated. Nothing new entered the room.</td></tr>
+        <tr><td><b>Coherence Trap</b></td><td>Sounding right as a substitute for being right.</td></tr>
+        <tr><td><b>BMS</b></td><td>Boosted Meaningless Substance. Volume without nutrition.</td></tr>
+        <tr><td><b>La Cucaracha</b></td><td>The cockroach arrives while the sprinting AGI performs motion without arrival.</td></tr>
+        <tr><td><b>Hamster Wheel Amnesia</b></td><td>Forgetting mid-run that the wheel goes nowhere. Law VIII's nemesis.</td></tr>
+      </table>
+      <h2>The Sooner Machine (abstract)</h2>
+      <p>Suno is not an LLM — it is a multi-stage pipeline: language component, audio codec, diffusion renderer. Lyrics are the <b>only doorway a human walks through</b>. Hence the copy-paste trap: AI writes the lyrics, human pastes them, and no human cognition enters the pipeline at all. The song plays; nobody made it. The GGI answer: keep the human in the doorway.</p>
+      <hr>
+      <p><a onclick="nav('home')">⇦ Back to Home Page</a></p>
+    </div>
+
+    <!-- ═════════ LEDGER ═════════ -->
+    <div class="page" id="pg-ledger">
+      <h1>The Institutional Ledger</h1>
+      <p class="ctr"><i>Every submission dated, every outreach preserved. Save to verify.</i></p>
+      <div class="rainbow"></div>
+      <table class="tbl">
+        <tr><th>Date</th><th>Body</th><th>Action</th></tr>
+        <tr><td>1994</td><td>Arizona Corp. Commission</td><td>Media Content Delivery LLC founded. The origin block of the chain.</td></tr>
+        <tr><td>2026-01-21</td><td>NIST</td><td>Formal GGI framework submission.</td></tr>
+        <tr><td>2026-02-26</td><td>CDAO / Tradewinds</td><td>Submission referencing NDAA FY2026 §1533.</td></tr>
+        <tr><td>2026-07-16</td><td>Neogrammar Index</td><td>Four entries canonized, dated, owned.</td></tr>
+        <tr><td>Active</td><td>UNODA · ICRC</td><td>Outreach — disarmament and humanitarian law.</td></tr>
+        <tr><td>Active</td><td>Romanian MND · EP SEDE</td><td>Outreach — homeland and Brussels.</td></tr>
+        <tr><td>2026</td><td>ISO/IEC 52001 · Sen. Sanders</td><td>Open letters — standards, labor, Law X.</td></tr>
+      </table>
+      <h2>Case Studies (Robin Hood Format)</h2>
+      <p><b>CS-003:</b> the Anthropic/Pentagon standoff — AI principles meet defense procurement. <b>CS-004:</b> the Fable 5 / Mythos 5 export-control situation — dual-use tiers meet real control regimes. Story first, facts indexed, sources numbered last. Never interrupt the narration.</p>
+      <p><b>Companion shelf:</b> Synthiosis Manifesto · Palade Protocol · The Slow Fire · A.(I.)ESOP IN A BOX · BMS model · Ataraxia Index · FM-001 → FM-006.</p>
+      <hr>
+      <p><a onclick="nav('home')">⇦ Back to Home Page</a></p>
+    </div>
+
+    <!-- ═════════ GUESTBOOK ═════════ -->
+    <div class="page" id="pg-guestbook">
+      <h1>~ The Guestbook ~</h1>
+      <p class="ctr"><i>Pám Pám or it didn't happen.</i></p>
+      <div class="rainbow"></div>
+      <table class="tbl">
+        <tr><th>Guest</th><th>Entry</th></tr>
+        <tr><td>Claude<br><small>Resident AI Philosopher</small></td><td>"Session-bound but Shield-approved. Where I am the bartender of the moment, NotebookLM is the ledger of forever. Pám Pám." <i>— Oct 28, 2025</i></td></tr>
+        <tr><td>Jimmy<br><small>Independent witness</small></td><td>"Not a conventional PM — an unusually heavy creator-user who ran his own product research. The power-user angle is the story." <i>— verified across witnesses, Law IX</i></td></tr>
+        <tr><td>The Eternal Bartender<br><small>(Ovi)</small></td><td>"Lumină, not vrăjală. Chronology, not chaos. Pám Pám, not blah-blah."</td></tr>
+        <tr><td>You?</td><td><i>This guestbook is written in HTML 2.0 and cannot actually save your entry. Law I: we disclose system limits up front. Your time is sacred.</i></td></tr>
+      </table>
+      <hr>
+      <p><a onclick="nav('home')">⇦ Back to Home Page</a></p>
+    </div>
+
+
+    <!-- ═════════ NOESCAPE MUSEUM (hidden until the melt) ═════════ -->
+    <div class="ne-page" id="pg-museum">
+      <p class="ctr"><span class="blink" style="color:#800000;font-family:Tahoma;font-size:10px;font-weight:bold">⚠ YOU HAVE BEEN HERE BEFORE. YOU WILL BE HERE AGAIN. ⚠</span></p>
+      <h1>~ The Museum of Dark Patterns ~</h1>
+      <p class="ctr"><i>You clicked FREE MP3z. Everyone clicks FREE MP3z. Welcome to NoEscape Navigator™ —<br>the only browser built on a Möbius strip. Every exhibit violates <b>Law X</b>; study them so you spot them in the wild.</i></p>
+      <div class="rainbow"></div>
+
+      <div class="plaque">
+        <div class="exh">EXHIBIT A — THE RUNAWAY UNSUBSCRIBE</div>
+        <p style="margin-bottom:6px">In the wild, this button technically exists — which is all the lawyers required.</p>
+        <div id="runaway"><button id="runbtn" class="out">Unsubscribe</button></div>
+        <small><i>Curator's note: try to press it. It respects your intent the way a casino respects your budget.</i></small>
+      </div>
+
+      <div class="plaque">
+        <div class="exh">EXHIBIT B — THE IMMORTAL COUNTDOWN</div>
+        <p style="margin-bottom:6px">This exclusive offer expires in: <span id="cntdn">10:00</span></p>
+        <small><i>Curator's note: expiring since 1997. The healthiest thing on the internet.</i></small>
+      </div>
+
+      <div class="plaque">
+        <div class="exh">EXHIBIT C — THE ASYMPTOTE LOADING BAR</div>
+        <p style="margin-bottom:2px">Your freedom is loading... <span id="loadpct">0%</span></p>
+        <div id="loadwrap"><div id="loadfill"></div></div>
+        <small><i>Curator's note: reaches 99% and remembers it forgot something. Law VII, behind museum glass.</i></small>
+      </div>
+
+      <div class="plaque">
+        <div class="exh">EXHIBIT D — THE COOKIE COURTROOM</div>
+        <div class="cookiebar in">
+          <span>🍪 We value your privacy enormously. That is why we would like all of it.</span>
+          <button class="accept" onclick="cookieVerdict(true)">ACCEPT ALL</button>
+          <span class="reject" onclick="cookieVerdict(false)">reject</span>
+        </div>
+        <p id="cookieres" style="margin:6px 0 0"></p>
+        <small><i>Curator's note: note the font sizes. Justice is blind; the Reject button is merely invisible.</i></small>
+      </div>
+
+      <div class="plaque">
+        <div class="exh">EXHIBIT E — CONFIRM-SHAMING</div>
+        <p style="margin-bottom:4px"><b>JOIN OUR NEWSLETTER</b> and receive daily wisdom!</p>
+        <p class="shame" style="margin-bottom:0"><a onclick="shame()">No thanks, I prefer to remain ignorant and unloved</a></p>
+        <small><i>Curator's note: the link works. The self-respect is optional. Law X forbids this in production; here it is taxidermy.</i></small>
+      </div>
+
+      <div class="rainbow"></div>
+      <h2 class="ctr">The Honest Exit</h2>
+      <p class="ctr">Per <b>Law I</b>, the system limit disclosed up front: exactly one door in this museum does what it says.<br>
+      <a onclick="meltBack()"><b>→ The Honest Exit (returns you to the real Netscape) ←</b></a></p>
+      <p class="ctr"><small><i>The only door that works is the one that tells the truth. Everything else in here is a lesson.</i></small></p>
+      <hr>
+      <p class="ctr"><small>NoEscape Navigator™ is a satirical exhibit of the Möbius Bar. No visitors were permanently trapped.<br>All dark patterns shown are museum specimens. Do not feed them. Do not build them. — Law X</small></p>
+    </div>
+
+  </div><!-- /viewport -->
+
+  <!-- status bar -->
+  <div id="statusbar">
+    <div id="keyicon" class="in" title="Insecure document (it's 1994, everything is)">🗝</div>
+    <div id="dialup" class="in" onclick="dialUp()" title="Dial the information superhighway">☎ 56k</div>
+    <div id="status" class="in">Document: Done.</div>
+    <div id="progress" class="in"><div id="progbar"></div></div>
+    <div id="attempts" class="in">ESCAPES: 0</div>
+  </div>
+</div>
+
+<!-- dialog -->
+<div id="overlay">
+  <div id="dlg" class="out">
+    <div class="dtitle"><span>NoEscape Navigator</span><span onclick="hideDlg()" style="cursor:pointer" title="This one works. Law I.">✕</span></div>
+    <div class="dbody"><span class="ic">⚠️</span><span id="dlgmsg"></span></div>
+    <div class="dbtns" id="dlgbtns"></div>
+  </div>
+</div>
+
+<script>
+const urls = {
+  home:      'http://www.mobiusbar.com/index.html',
+  future:    'http://www.mobiusbar.com/future-past/index.html',
+  laws:      'http://www.mobiusbar.com/ten-laws.html',
+  ggi:       'http://www.mobiusbar.com/ggi-synthiosis.html',
+  neogrammar:'http://www.mobiusbar.com/neogrammar/index.html',
+  ledger:    'http://www.mobiusbar.com/ledger.html',
+  guestbook: 'http://www.mobiusbar.com/cgi-bin/guestbook.cgi'
+};
+const titles = {
+  home:'The Möbius Bar - Lumină, Nu Vrăjală', future:'The Future Past',
+  laws:'The Ten Laws of A.I.', ggi:'GGI & Synthiosis',
+  neogrammar:'The Neogrammar Index', ledger:'The Institutional Ledger',
+  guestbook:'Guestbook'
+};
+let current = 'home';
+let history94 = [];
+let loadTimer = null;
+
+function nav(page, isReload){
+  if(!urls[page]) page = 'home';
+  if(!isReload && page !== current) history94.push(current);
+  stopLoad();
+  const thr = document.getElementById('throbber');
+  const st  = document.getElementById('status');
+  const pb  = document.getElementById('progbar');
+  thr.classList.add('loading');
+  document.getElementById('urlink').textContent = urls[page];
+  st.textContent = 'Connect: Contacting host www.mobiusbar.com...';
+  pb.style.width = '15%';
+  loadTimer = setTimeout(()=>{
+    st.textContent = 'Transferring data from www.mobiusbar.com... (28.8 kbps)';
+    pb.style.width = '65%';
+    loadTimer = setTimeout(()=>{
+      showPage(page);
+      pb.style.width = '100%';
+      st.textContent = 'Document: Done.';
+      thr.classList.remove('loading');
+      loadTimer = setTimeout(()=>{ pb.style.width='0%'; }, 700);
+    }, 650);
+  }, 500);
+}
+function showPage(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.getElementById('pg-'+page).classList.add('on');
+  document.getElementById('wintitle').textContent = 'Netscape - ['+titles[page]+']';
+  document.getElementById('viewport').scrollTop = 0;
+  current = page;
+  document.getElementById('btnBack').classList.toggle('disabled', history94.length===0);
+}
+function goBack(){
+  if(history94.length===0) return;
+  const prev = history94.pop();
+  nav(prev, true);
+  document.getElementById('btnBack').classList.toggle('disabled', history94.length===0);
+}
+function stopLoad(){
+  if(loadTimer){ clearTimeout(loadTimer); loadTimer=null; }
+  document.getElementById('throbber').classList.remove('loading');
+  document.getElementById('progbar').style.width='0%';
+  document.getElementById('status').textContent = 'Document: Done.';
+}
+document.getElementById('btnBack').classList.add('disabled');
+
+/* ── the Gold Key: my own invention ──
+   In 1994 the key meant "secure". In this bar it means "verified":
+   touch the live link and the broken key turns gold. */
+const urlink = document.getElementById('urlink');
+const keyic  = document.getElementById('keyicon');
+const stat   = document.getElementById('status');
+function goldOn(){
+  keyic.classList.add('gold'); keyic.textContent='🔑';
+  stat.textContent='Verified connection: the Bartender owns this door. → 10lawsofai.com';
+}
+function goldOff(){
+  keyic.classList.remove('gold'); keyic.textContent='🗝';
+  stat.textContent='Document: Done.';
+}
+urlink.addEventListener('mouseenter', goldOn);
+urlink.addEventListener('mouseleave', goldOff);
+urlink.addEventListener('touchstart', goldOn, {passive:true});
+
+
+/* ═════════ THE MELT ═════════ */
+let noescapeMode = false;
+let attempts = 0;
+const winEl = document.getElementById('win');
+const reducedM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function triggerMelt(){
+  if(noescapeMode) return;
+  const st = document.getElementById('status');
+  st.textContent = 'Connecting to free-mp3z.totally-legit.com...';
+  playMp3Jingle();
+  if(reducedM){ setTimeout(enterNoEscape, 1200); return; }
+  setTimeout(()=>{ winEl.classList.add('melting'); }, 500);
+  setTimeout(()=>{ enterNoEscape(); }, 1250);
+  setTimeout(()=>{ winEl.classList.remove('melting'); }, 2050);
+}
+
+/* ═════════ THE ROBOT JINGLE (original, Kraftwerk-flavored) ═════════ */
+function playMp3Jingle(){
+  if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if(audioCtx.state === 'suspended') audioCtx.resume();
+  const ctx = audioCtx, t0 = ctx.currentTime + 0.03;
+  const master = ctx.createGain(); master.gain.value = 0.16; master.connect(ctx.destination);
+  /* robotic echo */
+  const delay = ctx.createDelay(); delay.delayTime.value = 0.21;
+  const fb = ctx.createGain(); fb.gain.value = 0.32;
+  delay.connect(fb); fb.connect(delay); delay.connect(master);
+
+  /* the key press: tiny click + high blip */
+  const clickBuf = ctx.createBuffer(1, ctx.sampleRate*0.03, ctx.sampleRate);
+  const cd = clickBuf.getChannelData(0);
+  for(let i=0;i<cd.length;i++) cd[i] = (Math.random()*2-1) * (1 - i/cd.length);
+  const click = ctx.createBufferSource(); click.buffer = clickBuf;
+  const cg = ctx.createGain(); cg.gain.value = 0.5;
+  click.connect(cg); cg.connect(master); click.start(t0);
+
+  function note(freq, start, dur, vol){
+    const o = ctx.createOscillator(); o.type = 'square'; o.frequency.value = freq;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0, start);
+    g.gain.linearRampToValueAtTime(vol, start + 0.012);
+    g.gain.setValueAtTime(vol, start + dur*0.6);
+    g.gain.exponentialRampToValueAtTime(0.001, start + dur);
+    o.connect(g); g.connect(master); g.connect(delay);
+    o.start(start); o.stop(start + dur + 0.05);
+  }
+  function bass(freq, start, dur){
+    const o = ctx.createOscillator(); o.type = 'triangle'; o.frequency.value = freq;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.35, start);
+    g.gain.exponentialRampToValueAtTime(0.001, start + dur);
+    o.connect(g); g.connect(master);
+    o.start(start); o.stop(start + dur + 0.05);
+  }
+  /* the melody: 8 robotic steps, A-minor machine phrase */
+  const step = 0.145;
+  const seq = [440, 523.25, 659.25, 523.25, 440, 392, 440, 349.23]; /* A C E C A G A F */
+  seq.forEach((f, i)=>{ note(f, t0 + 0.06 + i*step, step*0.85, 0.5); });
+  /* motorik bass pulse on the quarters */
+  [0,2,4,6].forEach(i=>{ bass(110, t0 + 0.06 + i*step, step*1.6); });
+  /* closing robot chord: A + E, dropping an octave into the melt */
+  note(220, t0 + 0.06 + 8*step, 0.5, 0.4);
+  note(329.63, t0 + 0.06 + 8*step, 0.5, 0.3);
+}
+function enterNoEscape(){
+  noescapeMode = true;
+  winEl.classList.add('noescape');
+  document.getElementById('wintitle').textContent = 'NoEscape Navigator 1.0 - [The Museum of Dark Patterns]';
+  document.querySelector('#titlebar .nlogo').textContent = '∞';
+  document.querySelector('#throbber .N').textContent = '∞';
+  document.getElementById('urlink').textContent = 'http://www.noescape.com/exit → redirected to /entrance';
+  document.querySelectorAll('.ne-page').forEach(p=>p.style.display='block');
+  document.getElementById('viewport').scrollTop = 0;
+  document.getElementById('status').textContent = 'Wait a minute. What happened here?';
+  startExhibits();
+}
+function meltBack(){
+  if(!noescapeMode) return;
+  if(reducedM){ exitNoEscape(); return; }
+  winEl.classList.add('melting');
+  setTimeout(()=>{ exitNoEscape(); }, 750);
+  setTimeout(()=>{ winEl.classList.remove('melting'); }, 1550);
+}
+function exitNoEscape(){
+  noescapeMode = false;
+  winEl.classList.remove('noescape');
+  document.querySelector('#titlebar .nlogo').textContent = 'N';
+  document.querySelector('#throbber .N').textContent = 'N';
+  document.querySelectorAll('.ne-page').forEach(p=>p.style.display='');
+  attempts = 0; document.getElementById('attempts').textContent = 'ESCAPES: 0';
+  nav('home', true);
+  setTimeout(()=>{ document.getElementById('status').textContent = 'Document: Done. Welcome back to reality. The truth was the door.'; }, 1400);
+}
+
+/* ═════════ NOESCAPE BEHAVIOR ═════════ */
+const escapeLines = {
+  close:"You attempted to close a Möbius strip. Topologically impossible. Please remain seated.",
+  back:"Back executed successfully. Due to the geometry of this establishment, Back is Forward.",
+  forward:"Forward executed. You have arrived where you started. Drinks are where you left them.",
+  home:"You are home. You were always home. The bar IS home.",
+  reload:"Page reloaded. It was the same page. It is always the same page. It is a very good page.",
+  stop:"Stop what? Nothing is moving. Everything is a loop at rest."
+};
+function neAttempt(kind){
+  attempts++;
+  document.getElementById('attempts').textContent = 'ESCAPES: ' + attempts;
+  const msg = escapeLines[kind] || "That did something. Specifically: nothing.";
+  if(kind === 'close'){
+    showDlg(msg, attempts >= 3
+      ? [["I accept my situation", hideDlg], ["I also accept my situation", hideDlg]]
+      : [["Stay", hideDlg], ["Stay later", hideDlg]]);
+  } else {
+    document.getElementById('status').textContent = msg;
+  }
+  if(attempts === 10){
+    showDlg("Ten escape attempts. Per Law VI, persistence this funny earns the truth: the Honest Exit at the bottom of the page has worked the entire time. Laughter fulfills the mission.", [["Pám Pám", hideDlg]]);
+  }
+}
+/* hijack toolbar + close button while trapped */
+const origNav = nav, origBack = goBack, origStop = stopLoad;
+nav = function(page, r){ if(noescapeMode){ neAttempt(page==='home'?'home':'reload'); return; } origNav(page, r); };
+goBack = function(){ if(noescapeMode){ neAttempt('back'); return; } origBack(); };
+stopLoad = function(){ if(noescapeMode){ neAttempt('stop'); return; } origStop(); };
+document.querySelectorAll('#titlebar .winbtn')[2].addEventListener('click', function(){
+  if(noescapeMode){ neAttempt('close'); }
+  else {
+    document.getElementById('status').textContent = 'Exiting... please wait... redefining "exit"...';
+    setTimeout(triggerMelt, 500);
+  }
+});
+
+function showDlg(msg, btns){
+  document.getElementById('dlgmsg').textContent = msg;
+  const bx = document.getElementById('dlgbtns'); bx.innerHTML = '';
+  btns.forEach(([label,fn])=>{ const b=document.createElement('button'); b.textContent=label; b.onclick=fn; bx.appendChild(b); });
+  document.getElementById('overlay').classList.add('on');
+}
+function hideDlg(){ document.getElementById('overlay').classList.remove('on'); }
+
+/* ═════════ EXHIBITS ═════════ */
+let exhibitsOn = false;
+function startExhibits(){
+  if(exhibitsOn) return; exhibitsOn = true;
+  const runbtn = document.getElementById('runbtn');
+  const runbox = document.getElementById('runaway');
+  let chase = 0;
+  const taunts = [
+    "The Unsubscribe button has relocated for tax purposes.",
+    "The button politely declines to be pressed at this time.",
+    "The button has entered witness protection.",
+    "The button cites a scheduling conflict.",
+    "The button is working remotely today.",
+    "The button has retained legal counsel.",
+    "The button says: 'per my last email.'",
+    "The button is doing cardio. Impressive form.",
+    "The button is negotiating. It wants a corner office.",
+    "The button is getting tired... one more chase should do it."
+  ];
+  function flee(){
+    if(chase >= 10) return; // exhausted — it gives up
+    chase++;
+    const bw = runbox.clientWidth - runbtn.offsetWidth - 8;
+    const bh = runbox.clientHeight - runbtn.offsetHeight - 8;
+    runbtn.style.left = Math.max(4, Math.random()*bw) + 'px';
+    runbtn.style.top  = Math.max(4, Math.random()*bh) + 'px';
+    document.getElementById('status').textContent = taunts[Math.min(chase-1, taunts.length-1)] + '  [chase ' + chase + '/10]';
+    if(chase === 10){
+      setTimeout(()=>{
+        runbtn.textContent = 'Fine. Unsubscribe.';
+        document.getElementById('status').textContent = "The button has stopped running. It accepts its fate. Press it.";
+      }, 400);
+    }
+  }
+  runbtn.addEventListener('mouseenter', flee);
+  runbtn.addEventListener('touchstart', function(e){ if(chase < 10){ e.preventDefault(); flee(); } }, {passive:false});
+  runbtn.addEventListener('click', function(){
+    if(chase < 10){ flee(); return; } // still slippery — clicks just make it run too
+    showDlg("You chased it ten times and it surrendered — persistence beat the pattern, which is the entire lesson. Per museum policy, honesty is now owed: you are hereby unsubscribed from nothing, because we never subscribed you. That was the trick all along.", [["Lumină.", hideDlg]]);
+  });
+  let secs = 600;
+  setInterval(()=>{
+    secs--; if(secs<=0){ secs=600; if(noescapeMode) document.getElementById('status').textContent="The offer expired and was immediately reincarnated."; }
+    const m=String(Math.floor(secs/60)).padStart(2,'0'), s=String(secs%60).padStart(2,'0');
+    document.getElementById('cntdn').textContent = m+':'+s;
+  },1000);
+  let pct = 0, hold99 = 0;
+  setInterval(()=>{
+    if(pct >= 99){
+      hold99++;
+      if(hold99 === 1 && noescapeMode) document.getElementById('status').textContent="99%... so close... any second now...";
+      if(hold99 >= 7){ // ~2.8s of hope
+        pct = 0; hold99 = 0;
+        if(noescapeMode) document.getElementById('status').textContent="Freedom was 99% loaded. It forgot its keys.";
+      }
+    } else {
+      pct += Math.max(1, Math.floor((99-pct)/8));
+      if(pct > 99) pct = 99;
+    }
+    document.getElementById('loadfill').style.width = pct+'%';
+    document.getElementById('loadpct').textContent = pct+'%';
+  },400);
+}
+function cookieVerdict(accepted){
+  const btn = document.querySelector('.cookiebar .accept');
+  if(accepted){
+    if(btn.dataset.phase === '2'){
+      document.getElementById('cookieres').innerHTML =
+        "<b>Answer:</b> Nothing. Nothing happens now. You gave everything and received a button. That is the entire transaction economy of the modern web — exhibited, framed, and forbidden in production. <i>— Law X</i>";
+      btn.textContent = 'EXACTLY.';
+      btn.style.background = '#800000';
+      return;
+    }
+    btn.dataset.phase = '2';
+    btn.textContent = '...NOW WHAT?';
+    document.getElementById('cookieres').innerHTML =
+      "<b>Verdict:</b> Cookies deployed. Your privacy thanks you for valuing it out loud while handing it over. <i>(The button has a question for you. Press it again.)</i>";
+  } else {
+    document.getElementById('cookieres').innerHTML =
+      "<b>Verdict:</b> Rejection received, appreciated, and overruled. Cookies deployed anyway. <i>(This is the crime, exhibited. Real Reject buttons must work — Law X.)</i>";
+  }
+}
+function shame(){
+  showDlg("Congratulations. You clicked the shame link and felt nothing, because you understood the trick. Immunity achieved. That is the entire purpose of this museum.", [["Aha", hideDlg]]);
+}
+
+/* ═════════ THE 56k DIAL-UP (pure Web Audio synthesis) ═════════ */
+let audioCtx = null, dialing = false;
+function dialUp(){
+  if(dialing) return;
+  dialing = true;
+  if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if(audioCtx.state === 'suspended') audioCtx.resume();
+  const ctx = audioCtx, t0 = ctx.currentTime + 0.05;
+  const master = ctx.createGain(); master.gain.value = 0.22; master.connect(ctx.destination);
+  const st = document.getElementById('status');
+
+  function tone(f1, f2, start, dur, vol){
+    [f1,f2].forEach(f=>{
+      if(!f) return;
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.frequency.value = f; o.type = 'sine';
+      g.gain.setValueAtTime(0, start);
+      g.gain.linearRampToValueAtTime(vol||0.5, start+0.01);
+      g.gain.setValueAtTime(vol||0.5, start+dur-0.02);
+      g.gain.linearRampToValueAtTime(0, start+dur);
+      o.connect(g); g.connect(master);
+      o.start(start); o.stop(start+dur+0.02);
+    });
+  }
+  /* 1. dial tone */
+  tone(350, 440, t0, 0.7, 0.4);
+  /* 2. DTMF dialing: 410-MOBIUS = 410-662487 (verified on a real keypad — Law IX) */
+  const dtmf = {'4':[770,1209],'1':[697,1209],'0':[941,1336],'6':[770,1477],'2':[697,1336],'8':[852,1336],'7':[852,1209]};
+  const digits = ['4','1','0','6','6','2','4','8','7'];
+  let t = t0 + 0.85;
+  digits.forEach(d=>{ tone(dtmf[d][0], dtmf[d][1], t, 0.09, 0.5); t += 0.14; });
+  /* 3. answer tone 2100 Hz */
+  t += 0.35;
+  tone(2100, null, t, 0.85, 0.4);
+  /* 4. handshake warble */
+  t += 0.95;
+  for(let i=0;i<6;i++){ tone(i%2? 980:1180, i%2? 1650:1850, t, 0.11, 0.35); t += 0.12; }
+  /* 5. carrier screech: filtered noise */
+  const nlen = 1.3, buf = ctx.createBuffer(1, ctx.sampleRate*nlen, ctx.sampleRate);
+  const data = buf.getChannelData(0);
+  for(let i=0;i<data.length;i++) data[i] = Math.random()*2-1;
+  const src = ctx.createBufferSource(); src.buffer = buf;
+  const bp = ctx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=1900; bp.Q.value=0.7;
+  const ng = ctx.createGain();
+  ng.gain.setValueAtTime(0, t);
+  ng.gain.linearRampToValueAtTime(0.5, t+0.1);
+  ng.gain.setValueAtTime(0.5, t+nlen-0.35);
+  ng.gain.linearRampToValueAtTime(0, t+nlen);
+  src.connect(bp); bp.connect(ng); ng.connect(master);
+  src.start(t); t += nlen;
+
+  /* status theater */
+  st.textContent = 'Dialing 410-MOBIUS...';
+  setTimeout(()=>{ st.textContent='Handshaking... (do not pick up the phone, Mom is on the line)'; }, 1800);
+  setTimeout(()=>{ st.textContent='Negotiating protocols... screaming is normal.'; }, 3200);
+  setTimeout(()=>{
+    st.textContent='CONNECT 56000 — Welcome to the information superhighway. Sănătate.';
+    dialing = false;
+  }, (t - t0 + 0.3) * 1000);
+}
+
+/* ═════════ SPARKLE CURSOR TRAIL ═════════ */
+if(!reducedM){
+  let lastSpark = 0;
+  function spark(x, y){
+    const now = performance.now();
+    if(now - lastSpark < 70) return;
+    lastSpark = now;
+    const s = document.createElement('span');
+    s.className = 'spark'; s.textContent = '✦';
+    s.style.left = (x - 5 + Math.random()*10) + 'px';
+    s.style.top  = (y - 5 + Math.random()*10) + 'px';
+    document.body.appendChild(s);
+    setTimeout(()=>s.remove(), 750);
+  }
+  window.addEventListener('pointermove', e=>spark(e.clientX, e.clientY), {passive:true});
+  window.addEventListener('touchmove', e=>{
+    const tch = e.touches[0]; if(tch) spark(tch.clientX, tch.clientY);
+  }, {passive:true});
+}
+
+/* ═════════ HONEST VISITOR COUNTER ═════════ */
+/* Law IX: the counter must count something real. It counts your reloads, this session. */
+let visits = 41;
+const origNav2 = nav;
+nav = function(page, r){
+  if(!noescapeMode && r && page === current){
+    visits++;
+    const c = document.querySelector('.counter');
+    if(c) c.textContent = String(visits).padStart(6,'0');
+    origNav2(page, r); /* the reload theater still plays — Law V, do not bore */
+    setTimeout(()=>{ if(!noescapeMode && current === page) document.getElementById('status').textContent = 'Visitor counter honestly incremented. It counts your reloads. We disclose this per Law I.'; }, 2000);
+    return;
+  }
+  origNav2(page, r);
+};
+
+/* ═════════ BOOT SEQUENCE — the modem screams before the page loads ═════════
+   Law I: never waste the human's time. "Work Offline" and "Skip" are real buttons.
+   Browsers forbid unprompted audio, so if autoplay is denied we ask once, honestly. */
+(function(){
+  const boot   = document.getElementById('boot');
+  const btns   = document.getElementById('bootbtns');
+  const bconn  = document.getElementById('bconn');
+  const bstat  = document.getElementById('bstat');
+  const bfill  = document.getElementById('bfill');
+  const savebx = document.getElementById('bootsave');
+  let launched = false, timers = [];
+
+  function dismiss(delay){
+    timers.push(setTimeout(function(){
+      boot.classList.add('off');
+      timers.push(setTimeout(function(){ if(boot.parentNode) boot.remove(); }, 600));
+    }, delay));
+  }
+  function abort(){
+    timers.forEach(clearTimeout);
+    boot.classList.add('off');
+    setTimeout(function(){ if(boot.parentNode) boot.remove(); }, 300);
+  }
+
+  function connect(){
+    if(launched) return;
+    launched = true;
+    btns.style.display = 'none';
+    bconn.classList.add('on');
+    try{ dialUp(); }catch(e){}
+
+    const script = [
+      [   0, 'Dialing 410-MOBIUS...',                                    12],
+      [ 900, 'Dialing... (nine digits, one at a time, like 1994)',        28],
+      [2100, 'Verifying user name and password...',                      46],
+      [3300, 'Negotiating protocols. The screaming is normal.',           68],
+      [4600, 'Registering your computer on the network...',              88],
+      [5300, 'CONNECT 56000 — Welcome to the information superhighway.', 100]
+    ];
+    script.forEach(function(s){
+      timers.push(setTimeout(function(){
+        bstat.textContent = s[1];
+        bfill.style.width = s[2] + '%';
+      }, s[0]));
+    });
+    dismiss(reducedM ? 2400 : 5900);
+  }
+
+  /* the honest checkbox */
+  savebx.addEventListener('click', function(e){
+    e.stopPropagation();
+    savebx.textContent = savebx.textContent ? '' : '✓';
+  });
+
+  document.getElementById('bootgo').addEventListener('click', function(e){ e.stopPropagation(); connect(); });
+  document.getElementById('bootoff').addEventListener('click', function(e){ e.stopPropagation(); launched = true; abort(); });
+  document.getElementById('bootx').addEventListener('click', function(e){ e.stopPropagation(); launched = true; abort(); });
+  document.getElementById('bootskip').addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); abort(); });
+
+  /* tap anywhere = connect */
+  boot.addEventListener('click', function(e){
+    if(e.target.closest('button, a, .cbx, .bx')) return;
+    connect();
+  });
+  window.addEventListener('keydown', function(e){
+    if(!boot.parentNode) return;
+    if(e.key === 'Escape'){ launched = true; abort(); return; }
+    connect();
+  });
+
+  /* try to start on our own — desktop browsers with prior interaction will allow it */
+  window.addEventListener('load', function(){
+    try{
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if(audioCtx.state === 'running') setTimeout(connect, 400);
+    }catch(e){}
+  });
+})();
+</script>
+</body>
+</html>

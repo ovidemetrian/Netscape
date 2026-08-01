@@ -1,0 +1,13 @@
+Copyright (c) 2026 Ovidiu Demetrian / Media Content Delivery LLC.
+All rights reserved.
+
+The source is published for reading, study, and inspection. The text, concepts,
+naming, and the GGI / Synthiosis / Ten Laws of A.I. framework contained herein
+remain the property of the author. Reuse, redistribution, or derivative works
+require written permission.
+
+Human input, creativity, and wisdom remain human property. Time invested must not
+be harvested as free labor. — Law X
+
+For a permissive alternative, replace this file with a standard MIT or CC BY-NC 4.0
+license text.
