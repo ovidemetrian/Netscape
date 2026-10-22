@@ -1,50 +1,236 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Netscape — About</title>
-  <style>
-    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; max-width: 60ch; margin: 3rem auto; line-height: 1.6; padding: 0 1rem; }
-    header { border-bottom: 1px solid #eee; margin-bottom: 1.5rem; }
-    nav a { margin-right: 1rem; color: #0366d6; text-decoration: none }
-    footer { color: #666; font-size: 0.9rem; margin-top: 3rem; border-top: 1px solid #eee; padding-top: 1rem }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About NoEscape Navigator</title>
+<meta name="description" content="Help → About NoEscape Navigator 1.0 (Möbius build ∞). A parody About box from the Möbius Bar. Lumină, nu vrăjeală.">
+<meta name="author" content="Ovidiu Demetrian">
+<meta name="theme-color" content="#008080">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000080'/%3E%3Ctext x='16' y='25' font-family='Times,serif' font-size='26' font-weight='bold' fill='%2300ff00' text-anchor='middle'%3E%E2%88%9E%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --chrome:#c0c0c0;--chrome-dark:#808080;--chrome-darker:#404040;--chrome-light:#dfdfdf;
+  --title-blue:#000080;--link:#0000ee;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{min-height:100%;overflow-x:hidden}
+body{background:#008080;font-family:"MS Sans Serif",Tahoma,Geneva,sans-serif;font-size:11px;
+  display:flex;justify-content:center;align-items:flex-start;padding:16px}
+.out{border-top:2px solid var(--chrome-light);border-left:2px solid var(--chrome-light);
+  border-bottom:2px solid var(--chrome-darker);border-right:2px solid var(--chrome-darker)}
+.in{border-top:2px solid var(--chrome-darker);border-left:2px solid var(--chrome-darker);
+  border-bottom:2px solid var(--chrome-light);border-right:2px solid var(--chrome-light)}
+#win{width:min(640px,100%);background:var(--chrome);box-shadow:6px 6px 0 rgba(0,0,0,.35)}
+#titlebar{background:linear-gradient(90deg,var(--title-blue),#1084d0);color:#fff;display:flex;
+  align-items:center;gap:6px;padding:3px 4px;font-weight:bold}
+#titlebar .t{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nlogo{width:16px;height:16px;background:#000;color:#0f0;display:flex;align-items:center;justify-content:center;
+  font-family:"Times New Roman",serif;font-size:12px;border:1px solid #fff;flex-shrink:0}
+.winbtn{width:18px;height:16px;background:var(--chrome);color:#000;display:flex;align-items:center;
+  justify-content:center;font-size:10px;font-weight:bold;cursor:pointer;flex-shrink:0;text-decoration:none}
+#body{padding:14px;font-family:"Times New Roman",Times,serif;font-size:16px;line-height:1.45;color:#000}
+.hero{display:flex;gap:14px;align-items:center;margin-bottom:12px}
+.nsky{width:96px;height:96px;flex-shrink:0;position:relative;overflow:hidden;
+  background:linear-gradient(180deg,#000020,#000060 55%,#0000a0);border:2px outset #808080;cursor:pointer}
+.nsky .big{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);font-family:"Times New Roman",serif;
+  font-weight:bold;font-size:58px;color:#0f0;text-shadow:2px 2px 0 #000040;z-index:3;line-height:1}
+.nsky .hz{position:absolute;left:-30%;right:-30%;bottom:-46px;height:70px;border-radius:50%;z-index:2;
+  background:radial-gradient(ellipse at 50% 0%,#40c040,#008000 60%,#004000)}
+.nsky.spin .big{animation:spin 1.6s ease-in-out}
+@keyframes spin{to{transform:translate(-50%,-50%) rotateY(720deg)}}
+h1{font-size:24px;line-height:1.15}
+.ver{font-family:"Courier New",monospace;font-size:13px}
+.rainbow{height:6px;margin:12px 0;background:linear-gradient(90deg,red,orange,yellow,green,blue,indigo,violet)}
+h2{font-size:18px;margin:14px 0 6px}
+p{margin:0 0 10px}
+ul{margin:0 0 10px 24px}li{margin-bottom:3px}
+a{color:var(--link)}
+table{border-collapse:collapse;width:100%;margin:6px 0 12px}
+td,th{border:1px solid #808080;padding:4px 7px;font-size:14px;text-align:left;vertical-align:top}
+th{background:#a0a0a0}
+.lic{background:#fff;font-family:"Courier New",monospace;font-size:12px;line-height:1.4;padding:8px 10px;
+  height:150px;overflow-y:auto;margin-bottom:12px}
+.btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:12px 0 4px}
+button{min-width:120px;padding:6px 12px;background:var(--chrome);font-family:Tahoma,sans-serif;font-size:11px;cursor:pointer;
+  border-top:2px solid var(--chrome-light);border-left:2px solid var(--chrome-light);
+  border-bottom:2px solid var(--chrome-darker);border-right:2px solid var(--chrome-darker)}
+button:active{border-top:2px solid var(--chrome-darker);border-left:2px solid var(--chrome-darker);
+  border-bottom:2px solid var(--chrome-light);border-right:2px solid var(--chrome-light)}
+button.def{font-weight:bold;outline:1px dotted #000;outline-offset:-4px}
+#status{margin:6px 4px 4px;padding:3px 6px;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.foot{text-align:center;font-size:12px;color:#202020}
+/* the watermark */
+#ovibadge{position:fixed;right:14px;bottom:14px;z-index:50;touch-action:none;user-select:none;cursor:grab;
+  font-family:Tahoma,sans-serif;font-weight:bold;font-size:10px;letter-spacing:2px;color:#fff;
+  background:#000080;padding:6px 10px;border:2px solid #ffff00;
+  box-shadow:0 0 6px #ffff00,0 0 14px #ff0000;animation:glow 2.4s ease-in-out infinite}
+@keyframes glow{50%{box-shadow:0 0 10px #ffff00,0 0 24px #0080ff}}
+@media (prefers-reduced-motion:reduce){#ovibadge{animation:none}.nsky.spin .big{animation:none}}
+@media (max-width:480px){
+  body{padding:6px}
+  .hero{flex-direction:column;text-align:center}
+  #body{padding:10px;font-size:15px}
+  td,th{font-size:13px;padding:3px 5px}
+  button{flex:1 1 100%}
+}
+</style>
 </head>
 <body>
-  <header>
-    <h1>Netscape</h1>
-    <nav>
-      <a href="/">Home</a>
-      <a href="README.md">Repository README</a>
-    </nav>
-  </header>
 
-  <main>
-    <h2>New page</h2>
-    <p>This is a new placeholder page added to the Netscape repository. Replace this content with the page you'd like to host in the project (history, screenshots, documentation, or a project landing page).</p>
+<div id="win" class="out" role="dialog" aria-labelledby="ttl">
+  <div id="titlebar">
+    <div class="nlogo">∞</div>
+    <div class="t" id="ttl">About NoEscape Navigator</div>
+    <a class="winbtn out" href="./" title="This close button actually closes. Law I.">✕</a>
+  </div>
 
-    <section>
-      <h3>How to edit</h3>
-      <p>Edit <code>netscape.html</code> in the repository to update this page. If you want this page to be the site root, we can either:</p>
-      <ul>
-        <li>Replace <code>index.html</code> with this content, or</li>
-        <li>Update <code>index.html</code> to link to this page and include it in the navigation.</li>
-      </ul>
-    </section>
+  <div id="body">
+    <div class="hero">
+      <div class="nsky" id="logo" title="Click to hear the startup chime">
+        <span class="big">∞</span><div class="hz"></div>
+      </div>
+      <div>
+        <h1>NoEscape Navigator&trade;</h1>
+        <div class="ver">Version 1.0 (Möbius build ∞)<br>Compiled 1994 · Released yesterday's tomorrow</div>
+        <p style="margin-top:6px"><i>The only browser built on a one-sided surface.<br>Every exit is an entrance. Except one.</i></p>
+      </div>
+    </div>
 
-    <section>
-      <h3>Next steps I can take</h3>
-      <ul>
-        <li>Customize the page with the exact content you want (text, images, links).</li>
-        <li>Update index.html to add a link to this page.</li>
-        <li>Create a dedicated folder for site pages (e.g., <code>docs/</code>) and move this file there.</li>
-      </ul>
-    </section>
-  </main>
+    <div class="rainbow"></div>
 
-  <footer>
-    <p>Added by @copilot on behalf of the repository owner. File: <code>netscape.html</code></p>
-  </footer>
+    <h2>Licensed to</h2>
+    <p><b>guest</b> · The Möbius Bar · 410-MOBIUS<br>
+    <small>Serial number: none. There is no server, so there is nothing to register. Law X.</small></p>
+
+    <h2>System requirements</h2>
+    <table>
+      <tr><th>Component</th><th>Minimum</th></tr>
+      <tr><td>Processor</td><td>Intel 486 DX2/66, or any human brain willing to struggle with a thought</td></tr>
+      <tr><td>Memory</td><td>8 MB RAM. Plus a record of every decision, saved to verify (Law VIII)</td></tr>
+      <tr><td>Modem</td><td>14.4k. 28.8k recommended. 56k for the full scream</td></tr>
+      <tr><td>Display</td><td>800 × 600, 256 colors, one nose, one pane of glass</td></tr>
+      <tr><td>Patience</td><td>Not required. Your time is sacred (Law I)</td></tr>
+    </table>
+
+    <h2>Known bugs (disclosed up front)</h2>
+    <ul>
+      <li>The Back button goes Forward. This is geometry, not a bug.</li>
+      <li>The visitor counter only counts you. It says so.</li>
+      <li>The Guestbook cannot save your entry. It says so, too.</li>
+      <li>The Unsubscribe button runs away. It gives up after ten chases.</li>
+      <li>The countdown has been expiring since 1997.</li>
+    </ul>
+
+    <h2>End User License Agreement</h2>
+    <div class="lic in" tabindex="0" aria-label="License agreement">
+      1. YOU MAY read this agreement. Nobody has before. You are a pioneer.<br><br>
+      2. THE SOFTWARE collects nothing: no cookies, no analytics, no "anonymous usage data" that is somehow anonymous and also about you.<br><br>
+      3. YOUR INPUT, creativity and wisdom remain YOUR property. Nothing here is harvested as "training." (Law X)<br><br>
+      4. THE PUBLISHER promises nothing it cannot verify. Every claim on this page can be checked by clicking around. (Law IX)<br><br>
+      5. IF YOU LAUGHED at any point while reading this, clauses 1 through 4 are fulfilled and dissolve. (Law VI)<br><br>
+      6. THE "I AGREE" BUTTON below does exactly what it says. So does the other one. That is the entire product.<br><br>
+      7. If you scrolled this far, you have read more of a license than the industry's entire user base combined. Pám Pám.
+    </div>
+
+    <h2>Credits</h2>
+    <table>
+      <tr><td><b>Concept, design, Ten Laws</b></td><td>Ovidiu "Ovi" Demetrian, the Eternal Bartender</td></tr>
+      <tr><td><b>Modem screech</b></td><td>Synthesized live in Web Audio. No audio files were harmed</td></tr>
+      <tr><td><b>Throbber</b></td><td>Three pixels pretending to be shooting stars since 1994</td></tr>
+      <tr><td><b>The Unsubscribe button</b></td><td>Currently on leave. Retained legal counsel</td></tr>
+      <tr><td><b>Quality assurance</b></td><td>Law IX: trust, but verify</td></tr>
+      <tr><td><b>Special thanks</b></td><td>Everyone who heard a modem sing and still came back</td></tr>
+    </table>
+
+    <div class="btns">
+      <button id="chime">♪ Play startup chime</button>
+      <button id="agree" class="def">I Agree</button>
+      <button id="disagree">I Disagree</button>
+    </div>
+
+    <div class="rainbow"></div>
+    <p class="foot">NoEscape Navigator is a satirical exhibit of the Möbius Bar. It is not affiliated with any real browser, past or present.<br>
+    <a href="./">⇦ Back to The Möbius Bar</a> · <a href="https://github.com/ovidemetrian/Netscape" target="_blank" rel="noopener">Source</a> · <a href="https://10lawsofai.com" target="_blank" rel="noopener">10lawsofai.com</a><br>
+    © 1994–2026 Media Content Delivery LLC · Phoenix, Arizona · <b>Lumină, nu vrăjeală.</b></p>
+  </div>
+
+  <div id="status" class="in">Document: Done.</div>
+</div>
+
+<div id="ovibadge" title="Drag me">MADE BY OVI</div>
+
+<script>
+const st = document.getElementById('status');
+const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+let ctx = null;
+
+/* Original startup chime: a rising machine arpeggio, a modem chirp, and a resolving chord. */
+function chime(){
+  if(!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+  if(ctx.state === 'suspended') ctx.resume();
+  const t0 = ctx.currentTime + 0.04;
+  const master = ctx.createGain(); master.gain.value = 0.18; master.connect(ctx.destination);
+  const delay = ctx.createDelay(); delay.delayTime.value = 0.18;
+  const fb = ctx.createGain(); fb.gain.value = 0.28;
+  delay.connect(fb); fb.connect(delay); delay.connect(master);
+
+  function note(f, start, dur, vol, type){
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = type || 'triangle'; o.frequency.value = f;
+    g.gain.setValueAtTime(0, start);
+    g.gain.linearRampToValueAtTime(vol, start + 0.015);
+    g.gain.exponentialRampToValueAtTime(0.001, start + dur);
+    o.connect(g); g.connect(master); g.connect(delay);
+    o.start(start); o.stop(start + dur + 0.05);
+  }
+  /* rising arpeggio: C E G B D' */
+  [261.63, 329.63, 392.00, 493.88, 587.33].forEach((f,i)=> note(f, t0 + i*0.12, 0.35, 0.45, 'square'));
+  /* modem chirp: a quick 1200 -> 2400 Hz sweep */
+  const o = ctx.createOscillator(), g = ctx.createGain(), c = t0 + 0.66;
+  o.type = 'sine'; o.frequency.setValueAtTime(1200, c); o.frequency.exponentialRampToValueAtTime(2400, c + 0.18);
+  g.gain.setValueAtTime(0.25, c); g.gain.exponentialRampToValueAtTime(0.001, c + 0.2);
+  o.connect(g); g.connect(master); o.start(c); o.stop(c + 0.25);
+  /* resolving chord: Cmaj9, held */
+  [130.81, 261.63, 329.63, 392.00, 587.33].forEach(f=> note(f, t0 + 0.95, 1.6, 0.22, 'triangle'));
+
+  const logo = document.getElementById('logo');
+  logo.classList.remove('spin'); void logo.offsetWidth; logo.classList.add('spin');
+  st.textContent = 'Startup chime: original, synthesized live. Nothing was sampled. Law X.';
+}
+document.getElementById('chime').addEventListener('click', chime);
+document.getElementById('logo').addEventListener('click', chime);
+
+document.getElementById('agree').addEventListener('click', ()=>{
+  st.textContent = 'Agreement recorded nowhere. Returning you to the bar...';
+  setTimeout(()=>{ location.href = './'; }, 900);
+});
+let dis = 0;
+const disLines = [
+  'Disagreement accepted. It counts. Unlike some browsers, this one means it.',
+  'Still disagreeing? Good. Friction is how a thought becomes yours.',
+  'Three disagreements. You have passed the struggle test. Pám Pám.'
+];
+document.getElementById('disagree').addEventListener('click', ()=>{
+  st.textContent = disLines[Math.min(dis, disLines.length-1)]; dis++;
+});
+
+/* Draggable, glowing watermark */
+(function(){
+  const b = document.getElementById('ovibadge');
+  let sx=0, sy=0, ox=0, oy=0, drag=false;
+  b.addEventListener('pointerdown', e=>{
+    drag = true; b.setPointerCapture(e.pointerId); b.style.cursor='grabbing';
+    const r = b.getBoundingClientRect(); sx=e.clientX; sy=e.clientY; ox=r.left; oy=r.top;
+  });
+  b.addEventListener('pointermove', e=>{
+    if(!drag) return;
+    const x = Math.min(Math.max(0, ox + e.clientX - sx), innerWidth - b.offsetWidth);
+    const y = Math.min(Math.max(0, oy + e.clientY - sy), innerHeight - b.offsetHeight);
+    b.style.left = x+'px'; b.style.top = y+'px'; b.style.right='auto'; b.style.bottom='auto';
+  });
+  b.addEventListener('pointerup', ()=>{ drag=false; b.style.cursor='grab'; });
+})();
+</script>
 </body>
 </html>
