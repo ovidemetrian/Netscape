@@ -35,6 +35,7 @@ Browsers block unprompted audio, so the panel asks once, honestly. **Work Offlin
 | **The Institutional Ledger** | NIST, CDAO, and other three-letter friends |
 | **Guestbook** | Pám Pám or it didn't happen |
 | **NoEscape Navigator** | The dark-pattern museum — cookie bars, impossible exits, confirmshaming |
+| **Help → About** | The About box: system requirements, honest known-bugs list, a EULA worth reading, and an original startup chime |
 
 **Bonus features:**
 - ✅ Honest visitor counter (starts at 41, counts your reloads, says so)
@@ -67,7 +68,7 @@ Browsers block unprompted audio, so the panel asks once, honestly. **Work Offlin
 ## Deploy on GitHub Pages
 
 1. Create a repository
-2. Upload `index.html`, `README.md`, `LICENSE`, `.nojekyll` to the root
+2. Upload every file listed under **Files** to the root
 3. **Settings → Pages**
 4. **Source:** Deploy from a branch → `main` / `(root)` → Save
 5. Live in ~1 minute at `https://USERNAME.github.io/repository-name/`
@@ -77,12 +78,15 @@ Browsers block unprompted audio, so the panel asks once, honestly. **Work Offlin
 ## Files
 
 ```
-index.html    the entire site
-README.md     this file
-LICENSE       copyright terms
-.nojekyll     tells GitHub Pages to skip Jekyll processing
-sw.js         service worker (offline capability)
-manifest.json PWA metadata
+index.html                  the entire site
+netscape.html               Help → About NoEscape Navigator (parody About box + startup chime)
+README.md                   this file
+LICENSE.txt                 copyright terms
+.nojekyll                   tells GitHub Pages to skip Jekyll processing
+sw.js                       service worker (offline capability)
+manifest.json               PWA metadata
+NoEscape-Navigator-card.png share card, also the app icon
+og-image.png                link-preview image
 ```
 
 ---
@@ -90,7 +94,7 @@ manifest.json PWA metadata
 ## Also See
 
 - **Möbius Bar Desk** (Three AI agents checking each other on news) → https://ovidemetrian.github.io/mobiusbar/
-- **GGI Control Panel** (AGI governance framework) → https://ovidemetrian.github.io/GGI-GENIAL-GENUINE-INTELIGENCE/
+- **GGI Control Panel** (AGI governance framework) → https://ovidemetrian.github.io/GGI-GENIAL-GENUINE-INTELLIGENCE/
 - **My Future Past** (Audio-player résumé) → https://ovidemetrian.github.io/my-future-past/
 - **Ten Laws of AI** → https://10lawsofai.com
 - **YouTube Channel** → https://youtube.com/@mobiusbar
