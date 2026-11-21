@@ -1,0 +1,50 @@
+{
+  "name": "NoEscape Navigator · The Möbius Bar",
+  "short_name": "NoEscape",
+  "description": "A 1994 Netscape tribute: a 56k modem, the Ten Laws of AI, and a museum of dark patterns. Lumină, nu vrăjeală.",
+  "id": "noescape-navigator",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#008080",
+  "theme_color": "#008080",
+  "lang": "en",
+  "categories": [
+    "entertainment",
+    "education"
+  ],
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "About NoEscape Navigator",
+      "short_name": "About",
+      "url": "netscape.html"
+    }
+  ]
+}
