@@ -1,8 +1,8 @@
 {
-  "name": "The Möbius Bar — NoEscape Navigator",
-  "short_name": "Möbius Bar",
+  "name": "NoEscape Navigator · The Möbius Bar",
+  "short_name": "NoEscape",
   "description": "A 1994 Netscape tribute: a 56k modem, the Ten Laws of AI, and a museum of dark patterns. Lumină, nu vrăjeală.",
-  "id": "./",
+  "id": "noescape-navigator",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
