@@ -1,7 +1,7 @@
 /* The Möbius Bar — service worker.
    Network-first: when online you always get the latest pour.
    Offline: the bar stays open from cache. Nothing is tracked. Law X. */
-const CACHE = 'mobiusbar-v1';
+const CACHE = 'mobiusbar-v2';
 const CORE = [
   './',
   'index.html',
